@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-
+﻿
 namespace MoneyClass
 {
     public class Money : IDisposable
@@ -9,27 +7,26 @@ namespace MoneyClass
         static int objCounter = 0;
         private int thisCount;
         static FileStream fs;
-        static StreamWriter logWriter;
 
         static Money()
         {
             fs = new FileStream("log.txt", FileMode.OpenOrCreate, FileAccess.Write);
-            logWriter = new StreamWriter(fs);
         }
 
         private static void Log(string message)
         {
+            StreamWriter logWriter = new StreamWriter(fs);
             logWriter.WriteLine(message);
             logWriter.Flush();
         }
 
         public void Dispose()
         {
+            Log($"{thisCount} stream is closed");
             objCounter--;
             if (objCounter== 0)
             {
                 Log($"All streams are closed");
-                logWriter.Close();
                 fs.Close();
 
             }
@@ -68,6 +65,7 @@ namespace MoneyClass
             Gryvna = gryvna;
             Kopiyka = kopiyka;
             thisCount = objCounter;
+
             Log($"{objCounter} has been created or modified: {this}");
             objCounter++;
         }
@@ -127,7 +125,6 @@ namespace MoneyClass
             int temp = (money.Gryvna * 100) + money.Kopiyka + 1;
             Money result = new Money((int)(temp / 100), (int)(temp % 100));
             Log($"Incremented: {result}");
-            objCounter--;
             return result;
         }
 
@@ -136,7 +133,6 @@ namespace MoneyClass
             int temp = (money.Gryvna * 100) + money.Kopiyka - 1;
             Money result = new Money((int)(temp / 100), (int)(temp % 100));
             Log($"Decremented: {result}");
-            objCounter--;
             return result;
         }
 
