@@ -18,6 +18,7 @@ namespace MoneyClass
             StreamWriter logWriter = new StreamWriter(fs);
             logWriter.WriteLine(message);
             logWriter.Flush();
+            logWriter.Close();
         }
 
         public void Dispose()
